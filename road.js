@@ -34,10 +34,44 @@
                     destX, destY, destW, destH);
     }
 
+    var roadSlices = [];
     for (var z = scrDepth; z >= 1; z -= (scrDepth / 20)) {
-      var scale = scrDepth / (z * 4);
-      drawRoadSlice(scale, 0);
+      roadSlices.push({
+        z: z,
+        number: Math.floor(Math.random() * 4)
+      });
     }
+
+    var prevTime = new Date().getTime();
+    var speedFactor = 128 / 1000;
+    function processFrame(){
+      var currTime = new Date().getTime();
+      var delta = currTime - prevTime;
+
+      ctx.fillRect(0, 0, scrW, scrH);
+
+      // Moves the road slices
+      roadSlices.forEach(function(slice){
+        slice.z -= speedFactor * delta
+
+        // If it's behind the screen, pushes it back
+        while (slice.z <= 0) {
+          slice.z += scrDepth;
+        }
+      });
+      roadSlices.sort(function(a, b){ return b.z - a.z });
+
+      // Draws the road slices
+      roadSlices.forEach(function(slice){
+        var scale = scrDepth / (slice.z * 4);
+        drawRoadSlice(scale, slice.number);
+      });
+
+      prevTime = currTime;
+      requestAnimationFrame(processFrame);
+    }
+
+    requestAnimationFrame(processFrame);
   };
   roadImage.src = 'road04_13.png';
 })();

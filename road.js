@@ -28,17 +28,16 @@
           destX = centerX - destW / 2,
           destY = centerY - destH / 2;
 
+      destY = centerY - destH / 4;
+
       ctx.drawImage(roadImage, 0, imgPartH * number, imgPartW, imgPartH,
                     destX, destY, destW, destH);
     }
 
-    drawRoadSlice(0.5, 0);
-    /*
-    for (var z = scrDepth; z >= 1; z -= 4) {
-      var scale = 1.0 * scrDepth / (z * scrDepth);
+    for (var z = scrDepth; z >= 1; z -= (scrDepth / 20)) {
+      var scale = scrDepth / (z * 4);
       drawRoadSlice(scale, 0);
     }
-    */
   };
   roadImage.src = 'road04_13.png';
 })();
